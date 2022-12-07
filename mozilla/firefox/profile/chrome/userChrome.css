@@ -1,35 +1,267 @@
-@-moz-document url(chrome://browser/content/browser.xhtml) {
-	/* tabs on bottom of window */
-	/* requires that you set
-	 * toolkit.legacyUserProfileCustomizations.stylesheets = true
-	 * in about:config
-	 */
-	#mainPopupSet ~ box { -moz-box-ordinal-group: 10; }
-	#titlebar { -moz-box-ordinal-group: 10; }
-	#urlbar {
-		top: unset !important;
-		bottom: calc((var(--urlbar-toolbar-height) - var(--urlbar-height)) / 2) !important;
-		box-shadow: none !important;
-		display: flex !important;
-		flex-direction: column !important;
-	}
-	#urlbar-input-container {
-		order: 2;
-	}
-	#urlbar > .urlbarView {
-		order: 1;
-		border-bottom: 1px solid #666;
-	}
-	#urlbar-results {
-		display: flex;
-		flex-direction: column-reverse;
-	}
-	.search-one-offs { display: none !important; }
-	.tab-background { border-top: none !important; }
-	#navigator-toolbox::after { border: none; }
-	#TabsToolbar .tabbrowser-arrowscrollbox,
-	#tabbrowser-tabs, .tab-stack { min-height: 28px !important; }
-	.tabbrowser-tab { font-size: 80%; }
-	.tab-content { padding: 0 5px; }
-	.tab-close-button .toolbarbutton-icon { width: 12px !important; height: 12px !important; }
+@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+
+/*
+Original layout by /u/Herkt https://www.reddit.com/r/FirefoxCSS/comments/7eazix/my_attempt_at_a_oneline_interface/
+Use with compact density
+*/
+
+/*:root:-moz-lwtheme-brighttext {									   /* minor color changes to the default dark theme
+  --color-overflow: #222 !important;								 /* >> button color
+  --chrome-background-color: #111 !important;						 /* tab strip background & inactive tabs
+  --chrome-secondary-background-color: #222 !important;				 /* nav bar & active tab
+  --chrome-color: #ccc !important;									 /* url & tab text, close tab & new tab buttons
+  background-color: #444 !important;								 /* top border of out of focus window
+}*/
+
+:root:-moz-lwtheme-brighttext {										   /* minor changes to the default light theme */
+  --color-overflow: #f8f8f2 !important;								 /* >> button color */
+  --chrome-background-color: #282a36 !important;					 /* tab strip background & inactive tabs */
+  --chrome-secondary-background-color: #484a56 !important;			 /* nav bar & active tab */
+  --chrome-color: #f8f8f2 !important;								 /* url & tab text, close tab & new tab buttons */
+}
+
+:root {
+  --tabs-border: transparent !important;							 /* active tab left & right borders - not working in 58?*/
+  --toolbox-border-bottom-color: transparent !important;			 /* 1px line under background tabs */
+  --chrome-nav-bar-controls-border-color: transparent !important;	 /* border around url bar */
+  --toolbarbutton-inner-padding: 0!important;
+}
+
+:root[uidensity="compact"] {
+  --toolbarbutton-outer-padding: 0px!important;
+  --toolbarbutton-inner-padding: 0px!important;
+  --urlbar-icon-border-radius: 0px!important;
+}
+
+#nav-bar, #TabsToolbar {
+	color: var(--chrome-color) !important;
+	background-color: var(--chrome-background-color) !important;
+}
+
+/* Move Tab-bar beside Nav-bar */
+#TabsToolbar {
+  margin-bottom: -1px !important;				 /* not needed anymore? */
+  margin-top: 0px !important;					/*	*/
+  margin-left: 35vw !important;
+  margin-right: -34px !important;
+  max-height: 32px !important;
+}
+
+#nav-bar {
+  margin-bottom: 0px !important;			   /* remove navbar bottom 1px border */
+  margin-top: -31px !important;
+  margin-right: 65vw !important;
+  border-top: none !important;
+  height: 32px !important;
+}
+
+/* Remove padding above tabbar in compact mode */
+#main-window[sizemode="normal"] > #titlebar {
+  -moz-appearance: initial !important;
+}
+
+
+/* Back & Forward buttons */
+#back-button > .toolbarbutton-icon,
+#forward-button > .toolbarbutton-icon {
+  transform: scale(0.9, 0.9) !important;
+  margin-left: -2px !important;
+  margin-right: -2px !important;
+}
+
+/* Move hamburger menu to the left */
+#PanelUI-button,
+#customization-panel-container,
+#customization-panelWrapper .panel-arrow {
+  -moz-box-ordinal-group: 0 !important;
+  margin-right: -6px !important;
+}
+
+#appMenu-popup {
+  margin-right: -258px !important;
+}
+
+#appMenu-popup .panel-arrow {
+  margin-right: 248px !important;
+}
+
+/* More tools... button */
+#nav-bar-overflow-button {
+  transform: scale(0.9, 0.9) !important;
+  color: var(--color-overflow) !important;
+}
+
+
+/* Tabs */
+.tabbrowser-tab {
+  height: 32px !important;
+}
+
+/* Active tab */
+#TabsToolbar .tabbrowser-tab[selected] {
+	background-color: var(--chrome-secondary-background-color) !important;
+}
+
+/* Remove empty space before first tab
+Delete this rule if you need a space to drag the window*/
+#TabsToolbar .titlebar-placeholder[type="pre-tabs"]{
+	display: none !important;
+}
+
+/* Remove border between tabs
+Delete this rule if you want separators between background tabs */
+.tabbrowser-tab::after, .tabbrowser-tab::before {
+  border-left: none !important;
+}
+
+/* Border between background tabs
+.tabbrowser-tab::after, .tabbrowser-tab::before {
+  color: grey !important;
+  opacity: .2 !important;
+ }*/
+
+/* New tab button color */
+#new-tab-button, .tabs-newtab-button {
+  fill: var(--chrome-color) !important;
+  }
+
+/* tab line - adjust color & size, default #0a84ff 2px */
+.tab-line {
+  background-color: #5af78e !important;
+  height: 0px !important;
+  }
+
+
+/* Hide various elements */
+/* Menu */
+#appMenu-fxa-container,					   /* Sign in to Sync */
+#appMenu-fxa-container+toolbarseparator,
+/* #appMenuRestoreLastSession, */
+#appMenu-zoom-controls,
+#appMenu-zoom-controls+toolbarseparator,
+#appMenu-edit-controls,
+#appMenu-edit-controls+toolbarseparator,
+#appMenu-library-button,
+#appMenu-customize-button,
+#appMenu-customize-button+toolbarseparator,
+#appMenu-open-file-button,
+#appMenu-save-file-button,
+#appMenu-find-button,
+#appMenu-more-button,
+
+/* URL Bar */
+#pageActionButton,
+#pocket-button-box,
+ar-button,
+.autocomplete-history-dropmarker,
+#identity-icon-labels
+{
+	display: none !important;
+}
+
+.tab-label-container {
+  display: none!important;;
+}
+
+.tabbrowser-tab .tab-close-button {
+  display: none;
+}
+
+.tabbrowser-tab[selected]:hover ,.tabbrowser-tab[selected]:hover .tab-background , .tabbrowser-tab[selected]:hover .tab-stack {
+   max-width: 50px!important;
+  min-width: 50px!important;
+  width: 50px!important;
+  
+}
+
+.tabbrowser-tab[selected]:hover .tab-close-button {
+  display: block;
+}
+
+.tab-stack {
+  max-width: 32px!important;
+  min-width: 32px!important;
+  width: 32px!important;
+}
+
+#TabsToolbar .toolbarbutton-1 {
+    margin: 0 var(--tabs-navbar-shadow-size) 0 !important;
+}
+.tabbrowser-tab ,.tab-background {
+  max-width: 35px!important;
+  min-width: 35px!important;
+  width: 35px!important;
+}
+
+.tabbrowser-tab:not([pinned], [fadein]) {
+  display: none!important;;
+  
+}
+
+.tab-background { border-top: none !important; }
+
+#navigator-toolbox {
+  top: unset!important;
+  bottom: calc((var(--urlbar-toolbar-height) - var(--urlbar-height)));
+  box-shadow: none!important;
+  display: flex;
+  flex-direction: column;
+}
+
+#tabbrowser-arrowscrollbox {
+  display: flex;
+  align-items: end;
+  justify-content: end;
+}
+
+#tabbrowser-tabs[hasadjacentnewtabbutton]:not([overflow="true"]) ~ #new-tab-button {
+  display: unset!important;
+}
+
+body {
+  display: flex !important;
+  flex-direction: column-reverse !important;
+}
+
+#navigator-toolbox {
+  position: fixed!important;
+  top: unset !important;
+  z-index: 5!important;
+  bottom: 0!important;
+  box-shadow: inset 0px 0px 1px #000 !important;
+}
+
+#nav-bar:not([tabs-hidden="true"]) {
+  box-shadow: none!important;
+}
+
+#urlbar {
+  top: unset !important;
+  bottom: calc((var(--urlbar-toolbar-height) - var(--urlbar-height)) / 2) !important;
+  box-shadow: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+#urlbar-input-container {
+  order: 2;
+}
+#urlbar > .urlbarView {
+  order: 1;
+  border-bottom: 1px solid #666;
+}
+#urlbar-results {
+  display: flex;
+  flex-direction: column-reverse;
+}
+
+#PersonalToolbar {
+  display: none!important;
+}
+
+#browser {
+  padding-bottom: 32px;
+}
+
+.tab-icon-image:not([src], [pinned], [crashed], [pictureinpicture])[selected], .tab-icon-image:not([src], [pinned], [crashed], [sharing], [pictureinpicture]) {
+  display: block!important;
 }
