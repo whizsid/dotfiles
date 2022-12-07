@@ -1,0 +1,24 @@
+{
+  "rust-analyzer.updates.channel": "nightly",
+  "rust-analyzer.procMacro.enable": true,
+  "rust-analyzer.cargo.autoreload": true,
+  "rust-analyzer.server.extraEnv": {"RUSTUP_TOOLCHAIN": "stable"},
+  "eslint.format.enable": true,
+  "rust-analyzer.semanticHighlighting.doc.comment.inject.enable": true,
+  "rust-analyzer.signatureInfo.detail": "full",
+  "semanticTokens.enable": true,
+  "eslint.run": "onSave",
+  "eslint.packageManager": "yarn",
+  "java.jdt.ls.vmargs": "-noverify -Xmx1G -XX:+UseG1GC -XX:+UseStringDeduplication -javaagent:/usr/local/share/lombok/lombok-1.18.24.jar -Xbootclasspath/a:/usr/local/share/lombok/lombok-1.18.24.jar",
+  "java.trace.server": "verbose",
+  "java.configuration.runtimes": [
+    {
+        "name":"JavaSE-17",
+        "path": "/usr/lib/jvm/java-17-openjdk"
+    },
+    {
+        "name": "JavaSE-1.8",
+        "path": "/usr/lib/jvm/java-18-openjdk"
+    }
+  ]
+}
