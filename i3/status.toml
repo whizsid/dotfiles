@@ -1,0 +1,71 @@
+icons = "awesome"
+
+[theme]
+name = "solarized-dark"
+[theme.overrides]
+idle_bg = "none"
+idle_fg = "#ffffff"
+info_bg = "none"
+info_fg = "#0057e9"
+good_bg = "none"
+good_fg = "#87e911" 
+warning_bg = "none"
+warning_fg = "#f2ca19"
+critical_bg = "none"
+critical_fg = "#e11845"
+separator = "|"
+separator_bg = "auto"
+separator_fg = "auto"
+
+[[block]]
+block = "disk_space"
+path = "/"
+alias = "/"
+info_type = "available"
+unit = "GB"
+interval = 20
+warning = 20.0
+alert = 10.0
+
+[[block]]
+block = "memory"
+display_type = "memory"
+format_mem = "{mem_used_percents}"
+format_swap = "{swap_used_percents}"
+
+[[block]]
+block = "cpu"
+interval = 1
+
+[[block]]
+block = "load"
+interval = 1
+format = "{1m}"
+
+[[block]]
+block = "backlight"
+device = "intel_backlight"
+
+[[block]]
+block = "sound"
+
+[[block]]
+block = "battery"
+device="BAT1"
+interval = 10
+format = "{percentage}% {time}"
+
+[[block]]
+block = "time"
+interval = 60
+format = "%a %d/%m %R"
+
+[[block]]
+block = "music"
+player = "mpv"
+buttons = ["play", "next"]
+format = "{artist} | {title}"
+
+[[block]]
+block = "networkmanager"
+on_click = "alacritty -e nmtui"
